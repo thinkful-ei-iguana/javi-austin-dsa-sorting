@@ -108,4 +108,37 @@ function sortedLinkedList(head) {
     if (head === null || head.next !== null) {
         return head;
     }
+
+    let prev = null;
+    let slow = head;
+    let fast = head;
+
+    while (fast !== null && fast.next !== null) {
+        fast = fast.next.next;
+        prev = slow;
+        slow = slow.next;
+    }
+
+    prev.next = null;
+    const list1 = sortedLinkedList(head);
+    const list2 = sortedLinkedList(slow);
+
+    return mergeLinkedList(list1, list2)
+}
+
+function mergeLinkedList(link1, link2) {
+    const head = new _Node();
+    let current = head;
+    while(link1 !== null && link2 !== null) {
+        if (link1.val < link2.val) {
+            current.next = link1;
+            link1 = link1.next;
+        } else {
+            current.next = link2;
+            link2 = link2.next;
+        }
+        current = current.next;
+    }
+    current.next = link1 === null ? link2 : link1;
+    return head.next;
 }
